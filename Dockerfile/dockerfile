@@ -7,8 +7,9 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy project files
-COPY ["SimpleDotNetService.csproj", "./"]
-RUN dotnet restore "SimpleDotNetService.csproj"
+COPY ["SimpleDotNetService/SimpleDotNetService.csproj", "SimpleDotNetService/"]
+WORKDIR /src/SimpleDotNetService
+RUN dotnet restore
 
 # Copy and build the app
 COPY . .
