@@ -17,7 +17,7 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '9.0'  # Change based on your target framework
+          dotnet-version: '8.0'  # Change based on your target framework
 
       - name: Restore Dependencies
         run: dotnet restore SimpleDotNetService/SimpleDotNetService.sln
