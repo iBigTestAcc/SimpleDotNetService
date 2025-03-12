@@ -13,10 +13,10 @@ RUN dotnet restore
 # Copy everything else into the container
 COPY . .
 
-# ✅ Ensure the build directory is empty
-RUN rm -rf /app/build
+# ✅ Forcefully remove existing build artifacts to avoid permission issues
+RUN rm -rf bin obj
 
-# ✅ Specify the full path to the `.csproj` file when publishing
+# ✅ Run `dotnet publish` with clean output
 RUN dotnet publish /src/SimpleDotNetService/SimpleDotNetService.csproj -c Release -o /app/build
 
 FROM base AS final
