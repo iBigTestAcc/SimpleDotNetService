@@ -5,10 +5,14 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy .csproj file using the correct path
+# Copy project files
 COPY ["SimpleDotNetService/SimpleDotNetService.csproj", "SimpleDotNetService/"]
 WORKDIR /src/SimpleDotNetService
 RUN dotnet restore
+
+# ✅ Ensure write permissions for the build folder
+RUN mkdir -p /src/SimpleDotNetService/bin /src/SimpleDotNetService/obj
+RUN chmod -R 777 /src/SimpleDotNetService/bin /src/SimpleDotNetService/obj
 
 # Copy everything else and build
 COPY . .
