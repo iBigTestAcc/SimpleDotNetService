@@ -5,18 +5,19 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy project files
+# Copy project file separately to leverage caching
 COPY ["SimpleDotNetService/SimpleDotNetService.csproj", "SimpleDotNetService/"]
 WORKDIR /src/SimpleDotNetService
 RUN dotnet restore
 
-# ✅ Move build output to a separate, clean directory
-WORKDIR /app/build
-RUN rm -rf /app/build/*  
+# Copy everything else into the container
+COPY . .
 
-# Copy everything else and build
-COPY . /src/SimpleDotNetService
-RUN dotnet publish -c Release -o /app/build
+# ✅ Ensure the build directory is empty
+RUN rm -rf /app/build
+
+# ✅ Specify the full path to the `.csproj` file when publishing
+RUN dotnet publish /src/SimpleDotNetService/SimpleDotNetService.csproj -c Release -o /app/build
 
 FROM base AS final
 WORKDIR /app
