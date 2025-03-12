@@ -19,20 +19,17 @@ jobs:
         with:
           dotnet-version: '9.0'  # Change based on your target framework
 
-      - name: Change to Project Directory
-        run: cd SimpleDotNetService
-
       - name: Restore Dependencies
-        run: dotnet restore
+        run: dotnet restore SimpleDotNetService/SimpleDotNetService.sln
 
       - name: Build
-        run: dotnet build --no-restore --configuration Release
+        run: dotnet build SimpleDotNetService/SimpleDotNetService.sln --no-restore --configuration Release
 
       - name: Run Tests (if applicable)
-        run: dotnet test --no-build --configuration Release
+        run: dotnet test SimpleDotNetService/SimpleDotNetService.sln --no-build --configuration Release
 
       - name: Publish Application
-        run: dotnet publish -c Release -o publish
+        run: dotnet publish SimpleDotNetService/SimpleDotNetService.sln -c Release -o SimpleDotNetService/publish
 
       - name: Deploy to Render
         run: |
