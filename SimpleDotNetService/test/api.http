@@ -1,0 +1,6 @@
+POST http://localhost:5062/fizzbuzz
+Content-Type: application/json
+
+{
+    "Number": 5
+}
