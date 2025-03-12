@@ -13,6 +13,11 @@ RUN dotnet restore
 # ✅ Remove old build artifacts before running publish
 RUN rm -rf /src/SimpleDotNetService/bin /src/SimpleDotNetService/obj
 
+# ✅ Reset ownership and permissions (new fix)
+RUN mkdir -p /src/SimpleDotNetService/bin /src/SimpleDotNetService/obj
+RUN chown -R $(whoami) /src/SimpleDotNetService/bin /src/SimpleDotNetService/obj
+RUN chmod -R 777 /src/SimpleDotNetService/bin /src/SimpleDotNetService/obj
+
 # Copy everything else and build
 COPY . .
 RUN dotnet publish -c Release -o /app/publish
