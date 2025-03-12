@@ -1,6 +1,3 @@
-# This workflow will build a .NET project
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
-
 name: .NET
 
 on:
@@ -11,7 +8,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +18,9 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: '9.0'  # Change based on your target framework
+
+      - name: Change to Project Directory
+        run: cd SimpleDotNetService
 
       - name: Restore Dependencies
         run: dotnet restore
