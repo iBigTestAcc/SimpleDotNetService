@@ -7,12 +7,12 @@ FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
 # Copy project files
-COPY ["SimpleDotNetService/SimpleDotNetService.csproj", "SimpleDotNetService/"]
-WORKDIR /src/SimpleDotNetService
-RUN dotnet restore
+COPY ["SimpleDotNetService.csproj", "./"]
+RUN dotnet restore "SimpleDotNetService.csproj"
 
-# Copy and build the app
+# Copy everything else and set correct permissions
 COPY . .
+RUN chmod -R 777 /src  # Give full access before building
 RUN dotnet publish -c Release -o /app/publish
 
 # Final stage - run the application
