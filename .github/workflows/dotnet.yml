@@ -1,37 +1,37 @@
-name: Build and Test
+name: .NET
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
   pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '8.0.x'
+          dotnet-version: '8.0'  # Change based on your target framework
 
-      - name: Restore dependencies
-        run: dotnet restore src/SimpleDotNetService.sln  # ✅ Fix path
+      - name: Restore Dependencies
+        run: dotnet restore src/SimpleDotNetService.sln 
 
-      - name: Build solution
-        run: dotnet build src/SimpleDotNetService.sln --no-restore --configuration Release  # ✅ Fix path
+      - name: Build
+        run: dotnet build src/SimpleDotNetService.sln --no-restore --configuration Release
 
-      - name: Publish solution
-        run: dotnet publish src/SimpleDotNetService.sln --no-restore --configuration Release -o out  # ✅ Fix path
+      - name: Run Tests (if applicable)
+        run: dotnet test src/SimpleDotNetService.sln --no-build --configuration Release
 
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: app
-          path: out
+      - name: Publish Application
+        run: dotnet publish src/SimpleDotNetService.sln -c Release -o SimpleDotNetService/publish
+
+      - name: Deploy to Render
+        run: |
+          curl -X POST "https://api.render.com/deploy/srv-cv8i029u0jms739ar9p0?key=CBjAxPDlN9k" \
+          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
