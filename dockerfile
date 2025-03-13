@@ -2,24 +2,27 @@
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 
+# Use SDK image for building
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
+# ✅ Create a non-root user to avoid permission issues
+RUN useradd -m builduser
+USER builduser
+
 # Copy project file separately to leverage caching
-COPY ["SimpleDotNetService/SimpleDotNetService.csproj", "SimpleDotNetService/"]
+COPY --chown=builduser ["SimpleDotNetService/SimpleDotNetService.csproj", "SimpleDotNetService/"]
 WORKDIR /src/SimpleDotNetService
 RUN dotnet restore
 
 # Copy everything else into the container
-COPY . .
+COPY --chown=builduser . .
 
-# ✅ Forcefully remove existing build artifacts to avoid permission issues
-RUN rm -rf bin obj
+# ✅ Run build as non-root user in an isolated environment
+RUN dotnet publish SimpleDotNetService.csproj -c Release -o /app/publish --no-restore
 
-# ✅ Run `dotnet publish` with clean output
-RUN dotnet publish /src/SimpleDotNetService/SimpleDotNetService.csproj -c Release -o /app/build
-
+# Use the final runtime image
 FROM base AS final
 WORKDIR /app
-COPY --from=build /app/build .
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "SimpleDotNetService.dll"]
