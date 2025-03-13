@@ -1,0 +1,6 @@
+POST https://simpledotnetservice.onrender.com/fizzbuzz
+Content-Type: application/json
+
+{
+    "Number": 3
+}

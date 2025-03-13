@@ -40,4 +40,12 @@ app.MapPost("/max", (int[] request, IMaxService maxService) =>
     return result.HasValue ? Results.Ok(result.Value) : Results.NoContent();
 });
 
+app.MapPost("/missing", (int[] request, IMissingOneService missingOneService) =>
+{
+    if (request == null || request.Length != 99)
+        return Results.BadRequest("Array must contain exactly 99 elements.");
+
+    var missingNumber = missingOneService.FindMissingNumber(request);
+    return Results.Ok(missingNumber);
+});
 app.Run();
