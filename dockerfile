@@ -1,22 +1,20 @@
-# Use official .NET runtime as a base image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
-WORKDIR /app
-
-# Use SDK image for building
+# Use official .NET SDK for building
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy project files
-COPY ["SimpleDotNetService/SimpleDotNetService.csproj", "SimpleDotNetService/"]
-WORKDIR /src/SimpleDotNetService
+# Copy project file separately to leverage caching
+COPY ["SimpleDotNetService.csproj", "./"]
 RUN dotnet restore
 
-# Copy and build the app
+# Copy everything else and move to a clean build directory
 COPY . .
-RUN dotnet publish -c Release -o /app/publish
 
-# Final stage - run the application
-FROM base AS final
+# ✅ Use a completely separate directory for the build process
+WORKDIR /src/build
+RUN dotnet publish /src/SimpleDotNetService.csproj -c Release -o /src/build/out
+
+# Use a runtime image for final execution
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
-COPY --from=build /app/publish .
+COPY --from=build /src/build/out .
 ENTRYPOINT ["dotnet", "SimpleDotNetService.dll"]

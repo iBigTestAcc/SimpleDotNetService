@@ -1,37 +1,36 @@
-name: .NET
+name: Build and Test
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0'  # Change based on your target framework
+      - name: Verify .NET SDK Version
+        run: dotnet --info  #  Check if .NET 8 is installed
 
-      - name: Restore Dependencies
-        run: dotnet restore SimpleDotNetService/SimpleDotNetService.sln
-
-      - name: Build
-        run: dotnet build SimpleDotNetService/SimpleDotNetService.sln --no-restore --configuration Release
-
-      - name: Run Tests (if applicable)
-        run: dotnet test SimpleDotNetService/SimpleDotNetService.sln --no-build --configuration Release
-
-      - name: Publish Application
-        run: dotnet publish SimpleDotNetService/SimpleDotNetService.sln -c Release -o SimpleDotNetService/publish
-
-      - name: Deploy to Render
+      - name: Fix Permissions for `bin/` and `obj/`
         run: |
-          curl -X POST "https://api.render.com/deploy/srv-cv8i029u0jms739ar9p0?key=CBjAxPDlN9k" \
-          -H "Authorization: Bearer ${{ secrets.RENDER_API_KEY }}"
+          sudo rm -rf bin obj  
+          mkdir -p bin obj      
+          sudo chmod -R 777 bin obj  
+          sudo chown -R $(whoami):$(whoami) bin obj  
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build solution
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Publish solution
+        run: dotnet publish --no-restore --configuration Release -o out
