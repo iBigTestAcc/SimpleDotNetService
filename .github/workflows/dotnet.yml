@@ -16,15 +16,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v3
-        with:
-          dotnet-version: '8.0.x'
+      - name: Verify .NET SDK Version
+        run: dotnet --info  #  Check if .NET 8 is installed
 
-      - name: Clean previous builds
+      - name: Fix Permissions for `bin/` and `obj/`
         run: |
-          rm -rf bin obj  #  Ensures no permission conflicts
-          dotnet clean     #  Full clean build environment
+          sudo rm -rf bin obj  
+          mkdir -p bin obj      
+          sudo chmod -R 777 bin obj  
 
       - name: Restore dependencies
         run: dotnet restore
