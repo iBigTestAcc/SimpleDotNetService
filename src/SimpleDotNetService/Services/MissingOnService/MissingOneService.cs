@@ -1,10 +1,10 @@
 namespace SimpleDotNetService.Services
 {
-    public class MissingOneService
+    public class MissingOneService : IMissingOneService
     {
-        public int? FindMissingNumber(int[] numbers)
+        public int FindMissingNumber(int[] numbers)
         {
-            int? result = 5050; // Sum of numbers from 1 to 100
+            int result = 5050; // Sum of numbers from 1 to 100
             int actualSum = 0;
 
             // Calculate sum of given numbers

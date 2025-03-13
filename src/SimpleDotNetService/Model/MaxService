@@ -1,8 +1,0 @@
-namespace SimpleDotNetService.Models
-{
-    public class MaxServiceRequest
-        {
-        public string stringNum { get; set; }
-        public int[] number { get; set; }
-    }
-}

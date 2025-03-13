@@ -2,6 +2,6 @@ namespace SimpleDotNetService.Services
 {
     public interface IMissingOneService
     {
-        int? FindMissingNumber(int[] numbers);
+        int FindMissingNumber(int[] numbers);
     }
 }

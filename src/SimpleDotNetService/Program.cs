@@ -11,9 +11,6 @@ builder.Services.AddScoped<IFizzBuzzService, FizzBuzzService>();
 // MaxService
 builder.Services.AddScoped<IMaxService, MaxService>();
 
-// MaxService
-builder.Services.AddScoped<IMaxService, MaxService>();
-
 // MissingOneService
 builder.Services.AddScoped<IMissingOneService, MissingOneService>();
 //< Register
@@ -47,12 +44,12 @@ app.MapPost("/max", (int[] request, IMaxService maxService) =>
     return result.HasValue ? Results.Ok(result.Value) : Results.NoContent();
 });
 
-app.MapPost("/missing", (int[] request, IMissingOneService missingOneService) =>
+app.MapPost("/missing", (int[] request, IMissingOneService missingService) =>
 {
     if (request == null || request.Length != 99)
         return Results.BadRequest("Array must contain exactly 99 elements.");
 
-    var missingNumber = missingOneService.FindMissingNumber(request);
+    var missingNumber = missingService.FindMissingNumber(request);
     return Results.Ok(missingNumber);
 });
 app.Run();
