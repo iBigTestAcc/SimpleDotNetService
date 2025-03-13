@@ -7,6 +7,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Register FizzBuzzService
 builder.Services.AddScoped<IFizzBuzzService, FizzBuzzService>();
 
+// Register MaxService
+builder.Services.AddScoped<IMaxService, MaxService>();
+
 var app = builder.Build();
 
 app.UseHttpsRedirection();
@@ -22,6 +25,19 @@ app.MapPost("/fizzbuzz", (FizzBuzzRequest request, IFizzBuzzService fizzBuzzServ
 {
     var result = fizzBuzzService.ProcessNumber(request.Number);
     return string.IsNullOrEmpty(result) ? Results.NoContent() : Results.Ok(result);
+});
+
+// interface IMaxService
+app.MapGet("/max/{string}", (string number, IMaxService maxService) =>
+{
+    var result = maxService.FindMax(number);
+    return result.HasValue ? Results.Ok(result.Value) : Results.NoContent();
+});
+
+app.MapPost("/max", (int[] request, IMaxService maxService) =>
+{
+    var result = maxService.FindMax(request);
+    return result.HasValue ? Results.Ok(result.Value) : Results.NoContent();
 });
 
 app.Run();

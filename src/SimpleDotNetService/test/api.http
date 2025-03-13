@@ -1,6 +1,6 @@
-POST http://localhost:5062/fizzbuzz
+POST https://simpledotnetservice.onrender.com/fizzbuzz
 Content-Type: application/json
 
 {
-    "Number": 5
+    "Number": 3
 }
