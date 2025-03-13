@@ -1,4 +1,5 @@
 using SimpleDotNetService.Services;
+using SimpleDotNetService.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -24,11 +25,3 @@ app.MapPost("/fizzbuzz", (FizzBuzzRequest request, IFizzBuzzService fizzBuzzServ
 });
 
 app.Run();
-
-/*
-    POST
-*/
-public class FizzBuzzRequest
-{
-    public int Number { get; set; }
-}
