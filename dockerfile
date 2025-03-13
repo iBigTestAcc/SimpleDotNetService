@@ -2,30 +2,20 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# ✅ Copy everything first (ensures all files are available)
-COPY src/ ./src/
+# ✅ Copy entire `src` folder while maintaining correct structure
+COPY src/ /src/
 
-# ✅ Verify if `SimpleDotNetService.csproj` is copied
+# ✅ Verify files are copied
 RUN ls -R /src
 
-# ✅ Change working directory to the project folder
+# ✅ Move inside the correct project directory
 WORKDIR /src/SimpleDotNetService
 
-# ✅ Verify if `SimpleDotNetService.csproj` is copied
-RUN ls -R /src
-
-# ✅ Check if the project file exists
-RUN if [ ! -f "./SimpleDotNetService.csproj" ]; then echo "❌ Project file is missing!"; exit 1; fi
+# ✅ Ensure the correct project file is found
+RUN if [ ! -f "SimpleDotNetService.csproj" ]; then echo "❌ Project file is missing!"; exit 1; fi
 
 # ✅ Restore dependencies
-RUN dotnet restore ./SimpleDotNetService.csproj
-
-
-# ✅ Copy the entire project source again (ensuring all files exist)
-COPY src/SimpleDotNetService/ ./ 
-
-# ✅ Set working directory before publishing
-WORKDIR /src/SimpleDotNetService
+RUN dotnet restore SimpleDotNetService.csproj
 
 # ✅ Publish the app in a separate directory
 RUN dotnet publish -c Release -o /app/build --no-restore
