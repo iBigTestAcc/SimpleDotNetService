@@ -4,14 +4,21 @@ using SimpleDotNetService.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Register FizzBuzzService
+//> Register
+// FizzBuzzService
 builder.Services.AddScoped<IFizzBuzzService, FizzBuzzService>();
 
-// Register MaxService
+// MaxService
 builder.Services.AddScoped<IMaxService, MaxService>();
 
-var app = builder.Build();
+// MaxService
+builder.Services.AddScoped<IMaxService, MaxService>();
 
+// MissingOneService
+builder.Services.AddScoped<IMissingOneService, MissingOneService>();
+//< Register
+
+var app = builder.Build();
 app.UseHttpsRedirection();
 
 // interface IFizzBuzzService
