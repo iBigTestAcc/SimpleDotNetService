@@ -2,14 +2,16 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copy project files separately to leverage caching
-COPY ["SimpleDotNetService.csproj", "./"]
+# ✅ Copy the project file and restore dependencies
+COPY ["SimpleDotNetService/SimpleDotNetService/SimpleDotNetService.csproj", "SimpleDotNetService/"]
+WORKDIR /src/SimpleDotNetService
 RUN dotnet restore
 
-# Copy the rest of the application
-COPY . .
+# ✅ Copy the full project source
+COPY SimpleDotNetService/SimpleDotNetService/. SimpleDotNetService/
+WORKDIR /src/SimpleDotNetService
 
-# ✅ Move build output to a separate directory to avoid permission issues
+# ✅ Ensure the build happens in a clean directory
 RUN dotnet publish -c Release -o /app/build --no-restore
 
 # Use a runtime image for final execution
