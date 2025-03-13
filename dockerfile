@@ -2,13 +2,13 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# ✅ Copy the project file and restore dependencies
-COPY ["SimpleDotNetService/SimpleDotNetService/SimpleDotNetService.csproj", "SimpleDotNetService/"]
+# ✅ Copy only the `.csproj` file first to optimize caching
+COPY SimpleDotNetService/SimpleDotNetService/*.csproj SimpleDotNetService/
 WORKDIR /src/SimpleDotNetService
 RUN dotnet restore
 
 # ✅ Copy the full project source
-COPY SimpleDotNetService/SimpleDotNetService/. SimpleDotNetService/
+COPY SimpleDotNetService/SimpleDotNetService/ SimpleDotNetService/
 WORKDIR /src/SimpleDotNetService
 
 # ✅ Ensure the build happens in a clean directory
