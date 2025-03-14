@@ -6,8 +6,14 @@ namespace SimpleDotNetService.Services
     {
         public string ConvertBase10To2(Base10To2Request postObj)
         {
+            
             string result = string.Empty;
             int input = postObj.Number;
+            if (input == 0) 
+            {
+                return "0";
+            }
+
             while(input > 0)
             {
                 int currentVal = input % 2;

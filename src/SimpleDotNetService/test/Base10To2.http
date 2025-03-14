@@ -2,5 +2,5 @@ POST http://localhost:5062/Base10To2
 Content-Type: application/json
 
 {
-  "number": "512"
+  "number": "1776"
 }
