@@ -1,0 +1,6 @@
+POST http://localhost:5062/Base2To10
+Content-Type: application/json
+
+{
+  "number": "0100000111"
+}

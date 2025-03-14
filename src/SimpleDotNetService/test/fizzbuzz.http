@@ -1,4 +1,4 @@
-POST https://simpledotnetservice.onrender.com/fizzbuzz
+POST http://localhost:5062/fizzbuzz
 Content-Type: application/json
 
 {

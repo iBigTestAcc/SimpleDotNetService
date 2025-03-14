@@ -13,6 +13,9 @@ builder.Services.AddScoped<IMaxService, MaxService>();
 
 // MissingOneService
 builder.Services.AddScoped<IMissingOneService, MissingOneService>();
+
+// MissingOneService
+builder.Services.AddScoped<IBase2To10, Base2To10>();
 //< Register
 
 var app = builder.Build();
@@ -52,4 +55,14 @@ app.MapPost("/missing", (int[] request, IMissingOneService missingService) =>
     var missingNumber = missingService.FindMissingNumber(request);
     return Results.Ok(missingNumber);
 });
+
+app.MapPost("/base2To10", (Base2To10Request request, IBase2To10 Base2To10) =>
+{
+    if (request == null)
+        return Results.BadRequest("Array must contain exactly 99 elements.");
+
+    var missingNumber = Base2To10.ConvertBase2To10(request);
+    return Results.Ok(missingNumber);
+});
+
 app.Run();
