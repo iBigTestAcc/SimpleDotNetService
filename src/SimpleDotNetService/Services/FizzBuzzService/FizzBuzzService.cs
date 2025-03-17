@@ -1,15 +1,21 @@
+using SimpleDotNetService.Models;
 namespace SimpleDotNetService.Services
 {
     public class FizzBuzzService : IFizzBuzzService
     {
-        public string ProcessNumber(int number)
+        public string ProcessNumber(RequestInt inputObj)
         {
             string result = string.Empty;
-            if (number % 3 == 0 && number % 5 == 0)
+            if (inputObj.InputInt == 0)
+            {
+                result = "Out of Scope";
+                return result;
+            }
+            if (inputObj.InputInt % 3 == 0 && inputObj.InputInt % 5 == 0)
                 result = "ab";
-            else if (number % 3 == 0)
+            else if (inputObj.InputInt % 3 == 0)
                 result = "a";
-            else if (number % 5 == 0)
+            else if (inputObj.InputInt % 5 == 0)
                 result = "b";
             
             return result;

@@ -1,7 +1,8 @@
+using SimpleDotNetService.Models;
 namespace SimpleDotNetService.Services
 {
     public interface IFizzBuzzService
     {
-        string ProcessNumber(int number);
+        string ProcessNumber(RequestInt obj);
     }
 }

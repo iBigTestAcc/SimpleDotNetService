@@ -5,13 +5,13 @@ namespace SimpleDotNetService.Services
 {
     public class Base2To10 : IBase2To10
     {
-        public int ConvertBase2To10(Base2To10Request postObj)
+        public int ConvertBase2To10(RequestString postObj)
         {
             int result = 0;
-            int precedence = postObj.Number.Length - 1;
-            for(int x = 0; x < postObj.Number.Length; x++)
+            int precedence = postObj.InputString.Length - 1;
+            for(int x = 0; x < postObj.InputString.Length; x++)
             {
-                if(postObj.Number[x] == '1')
+                if(postObj.InputString[x] == '1')
                 {
                     if(precedence < 0)
                     {   

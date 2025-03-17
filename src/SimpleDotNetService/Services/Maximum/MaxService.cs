@@ -1,3 +1,4 @@
+using SimpleDotNetService.Models;
 namespace SimpleDotNetService.Services
 {
     public class MaxService : IMaxService
@@ -25,10 +26,12 @@ namespace SimpleDotNetService.Services
             
             return result;
         }
-        public int? FindMax(RequestObj inputObj)
+        public int? FindMax(RequestIntArray inputObj)
         {
-            if (inputObj == null || inputObj.InputIntArray.Length == 0)
+            if (inputObj == null || inputObj.InputIntArray == null || inputObj.InputIntArray.Length == 0)
+            {
                 throw new ArgumentException("Array cannot be empty");
+            }
 
             int result = inputObj.InputIntArray[0]; // Assume first element is max
 
