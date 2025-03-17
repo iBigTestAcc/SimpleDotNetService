@@ -25,18 +25,18 @@ namespace SimpleDotNetService.Services
             
             return result;
         }
-        public int? FindMax(int[] numbers)
+        public int? FindMax(RequestObj inputObj)
         {
-            if (numbers == null || numbers.Length == 0)
+            if (inputObj == null || inputObj.InputIntArray.Length == 0)
                 throw new ArgumentException("Array cannot be empty");
 
-            int result = numbers[0]; // Assume first element is max
+            int result = inputObj.InputIntArray[0]; // Assume first element is max
 
-            for (int i = 1; i < numbers.Length; i++)
+            for (int i = 1; i < inputObj.InputIntArray.Length; i++)
             {
-                if (numbers[i] > result)
+                if (inputObj.InputIntArray[i] > result)
                 {
-                    result = numbers[i];
+                    result = inputObj.InputIntArray[i];
                 }
             }
             

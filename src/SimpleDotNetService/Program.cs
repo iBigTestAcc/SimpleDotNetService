@@ -1,8 +1,21 @@
+using Microsoft.OpenApi.Models;
 using SimpleDotNetService.Services;
 using SimpleDotNetService.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Add services to the container.
+builder.Services.AddEndpointsApiExplorer(); // Enables API Explorer
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "SimpleDotNetService API",
+        Version = "v1",
+        Description = "A simple Web API with Swagger documentation."
+    });
+});
 
 //> Register
 // FizzBuzzService
@@ -22,6 +35,15 @@ builder.Services.AddScoped<IBase10To2, Base10To2>();
 //< Register
 
 var app = builder.Build();
+
+// Enable Swagger in development and production
+app.UseSwagger();
+app.UseSwaggerUI(options =>
+{
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "SimpleDotNetService API v1");
+    options.RoutePrefix = ""; // Set as root to open Swagger UI by default
+});
+
 app.UseHttpsRedirection();
 
 // interface IFizzBuzzService
@@ -44,7 +66,7 @@ app.MapGet("/max/{string}", (string number, IMaxService maxService) =>
     return result.HasValue ? Results.Ok(result.Value) : Results.NoContent();
 });
 
-app.MapPost("/max", (int[] request, IMaxService maxService) =>
+app.MapPost("/max", (RequestObj request, IMaxService maxService) =>
 {
     var result = maxService.FindMax(request);
     return result.HasValue ? Results.Ok(result.Value) : Results.NoContent();
